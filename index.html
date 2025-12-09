@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя Візитка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 50px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+
+        .bio {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border-left: 4px solid #667eea;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .social-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .social-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .social-card.youtube:hover { border-color: #FF0000; }
+        .social-card.steam:hover { border-color: #00adee; }
+        .social-card.reddit:hover { border-color: #FF4500; }
+        .social-card.github:hover { border-color: #333; }
+        .social-card.twitter:hover { border-color: #1DA1F2; }
+        .social-card.discord:hover { border-color: #5865F2; }
+
+        .social-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .social-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .social-handle {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.1);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .social-links {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="particles" id="particles"></div>
+        
+        <div class="content">
+            <div class="avatar" onclick="animateAvatar()">👤</div>
+            
+            <h1 id="name">Ваше Ім'я</h1>
+            <p class="subtitle">Розробник | Геймер | Творець</p>
+            
+            <div class="bio">
+                <p>👋 Привіт! Я захоплююсь технологіями, іграми та створенням цікавого контенту. 
+                Тут ви знайдете всі мої профілі в соціальних мережах. Підписуйтесь і слідкуйте за моїми пригодами!</p>
+            </div>
+
+            <div class="social-links">
+                <div class="social-card youtube" onclick="openLink('youtube')">
+                    <div class="social-icon">📺</div>
+                    <div class="social-name">YouTube</div>
+                    <div class="social-handle">@ВашКанал</div>
+                </div>
+
+                <div class="social-card steam" onclick="openLink('steam')">
+                    <div class="social-icon">🎮</div>
+                    <div class="social-name">Steam</div>
+                    <div class="social-handle">@ВашSteam</div>
+                </div>
+
+                <div class="social-card reddit" onclick="openLink('reddit')">
+                    <div class="social-icon">🤖</div>
+                    <div class="social-name">Reddit</div>
+                    <div class="social-handle">u/ВашReddit</div>
+                </div>
+
+                <div class="social-card github" onclick="openLink('github')">
+                    <div class="social-icon">💻</div>
+                    <div class="social-name">GitHub</div>
+                    <div class="social-handle">@ВашGitHub</div>
+                </div>
+
+                <div class="social-card twitter" onclick="openLink('twitter')">
+                    <div class="social-icon">🐦</div>
+                    <div class="social-name">Twitter</div>
+                    <div class="social-handle">@ВашTwitter</div>
+                </div>
+
+                <div class="social-card discord" onclick="openLink('discord')">
+                    <div class="social-icon">💬</div>
+                    <div class="social-name">Discord</div>
+                    <div class="social-handle">ВашDiscord#0000</div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="projects">12</div>
+                    <div class="stat-label">Проектів</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="followers">1.2K</div>
+                    <div class="stat-label">Підписників</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="games">47</div>
+                    <div class="stat-label">Ігор</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Створюємо анімовані частинки
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 10 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = Math.random() * 4 + 4 + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Анімація аватара
+        function animateAvatar() {
+            const avatar = document.querySelector('.avatar');
+            const emojis = ['👤', '😎', '🎮', '💻', '🚀', '⚡', '🔥', '✨'];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            avatar.textContent = randomEmoji;
+            setTimeout(() => {
+                avatar.textContent = '👤';
+            }, 1000);
+        }
+
+        // Відкриття посилань (замініть на свої)
+        function openLink(platform) {
+            const links = {
+                youtube: 'https://youtube.com/@ВашКанал',
+                steam: 'https://steamcommunity.com/id/ВашSteam',
+                reddit: 'https://reddit.com/user/ВашReddit',
+                github: 'https://github.com/ВашGitHub',
+                twitter: 'https://twitter.com/ВашTwitter',
+                discord: 'https://discord.com'
+            };
+            
+            alert(`Відкриття: ${platform}\n(Замініть посилання у коді на свої реальні)`);
+            // window.open(links[platform], '_blank');
+        }
+
+        // Анімація чисел при завантаженні
+        function animateNumbers() {
+            const numbers = document.querySelectorAll('.stat-number');
+            numbers.forEach(num => {
+                const text = num.textContent;
+                num.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    num.style.transform = 'scale(1)';
+                }, 300);
+            });
+        }
+
+        // Додаємо ефект набору тексту для імені
+        function typeWriter() {
+            const name = document.getElementById('name');
+            const text = name.textContent;
+            name.textContent = '';
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    name.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, 100);
+                }
+            }
+            type();
+        }
+
+        // Ініціалізація
+        window.onload = () => {
+            createParticles();
+            typeWriter();
+            setTimeout(animateNumbers, 500);
+        };
+
+        // Інтерактивність при наведенні на картки
+        document.querySelectorAll('.social-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) rotate(2deg)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) rotate(0)';
+            });
+        });
+    </script>
+</body>
+</html>
